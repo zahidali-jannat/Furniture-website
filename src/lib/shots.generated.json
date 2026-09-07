@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "start": 0,
+    "end": 1.46,
+    "mode": "loop",
+    "name": "living-wide",
+    "width": 1136,
+    "fps": 24,
+    "duration": 1.46,
+    "src": "/video/shot-01-living-wide.mp4",
+    "poster": "/poster/shot-01-living-wide.jpg"
+  },
+  {
+    "id": 2,
+    "start": 1.54,
+    "end": 2.96,
+    "mode": "scrub",
+    "name": "boucle-chair",
+    "width": 960,
+    "fps": 60,
+    "duration": 1.42,
+    "src": "/video/shot-02-boucle-chair.mp4",
+    "poster": "/poster/shot-02-boucle-chair.jpg"
+  },
+  {
+    "id": 3,
+    "start": 3.04,
+    "end": 4.44,
+    "mode": "scrub",
+    "name": "linear-pendant",
+    "width": 960,
+    "fps": 60,
+    "duration": 1.4,
+    "src": "/video/shot-03-linear-pendant.mp4",
+    "poster": "/poster/shot-03-linear-pendant.jpg"
+  },
+  {
+    "id": 4,
+    "start": 4.52,
+    "end": 5.92,
+    "mode": "loop",
+    "name": "foliage-reveal",
+    "width": 1136,
+    "fps": 24,
+    "duration": 1.4,
+    "src": "/video/shot-04-foliage-reveal.mp4",
+    "poster": "/poster/shot-04-foliage-reveal.jpg"
+  },
+  {
+    "id": 5,
+    "start": 6,
+    "end": 7.34,
+    "mode": "scrub",
+    "name": "walnut-desk",
+    "width": 960,
+    "fps": 60,
+    "duration": 1.34,
+    "src": "/video/shot-05-walnut-desk.mp4",
+    "poster": "/poster/shot-05-walnut-desk.jpg"
+  },
+  {
+    "id": 6,
+    "start": 7.42,
+    "end": 8.78,
+    "mode": "loop",
+    "name": "modular-sofa",
+    "width": 1136,
+    "fps": 24,
+    "duration": 1.36,
+    "src": "/video/shot-06-modular-sofa.mp4",
+    "poster": "/poster/shot-06-modular-sofa.jpg"
+  },
+  {
+    "id": 7,
+    "start": 8.86,
+    "end": 10,
+    "mode": "scrub",
+    "name": "penthouse-pullback",
+    "width": 1136,
+    "fps": 60,
+    "duration": 1.14,
+    "src": "/video/shot-07-penthouse-pullback.mp4",
+    "poster": "/poster/shot-07-penthouse-pullback.jpg"
+  }
+]

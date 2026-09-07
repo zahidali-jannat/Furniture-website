@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Palette: sampled from the project's own assets ---- */
+  --color-bone:       #f2efe9;
+  --color-oat:        #d8cfc2;
+  --color-sand:       #c8bcab;
+  --color-clay:       #c08a6e;
+  --color-copper:     #b87a4b;
+  --color-walnut:     #6b4f3a;
+  --color-olive:      #6f6f52;
+  --color-charcoal:   #1a1815;
+  --color-ink:        #0b0a09;
+  --color-smoke:      #8a8378;
+
+  --font-display: var(--font-display), "Times New Roman", serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fluid display sizes */
+  --text-d1: clamp(3rem, 11vw, 11rem);
+  --text-d2: clamp(2.4rem, 7.5vw, 7rem);
+  --text-d3: clamp(1.9rem, 4.6vw, 4rem);
+
+  --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: only light;
+  --shell: var(--color-bone);
+}
+
+html {
+  background: var(--color-bone);
+  /* Lenis drives scrolling; native smooth would fight it */
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--shell);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-clay);
+  color: var(--color-bone);
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Hide scrollbar without losing scrollability */
+body::-webkit-scrollbar { width: 0; height: 0; }
+body { scrollbar-width: none; }
+
+/* ---- Typography primitives ---- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+}
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.body-lg {
+  font-size: clamp(1rem, 1.15vw, 1.1875rem);
+  line-height: 1.62;
+  letter-spacing: -0.005em;
+}
+
+/* Masked line reveal: a line sits inside an overflow-clipped row */
+.line-mask { overflow: hidden; display: block; padding-bottom: 0.06em; }
+.line-inner { display: block; will-change: transform; }
+
+/**
+ * Hero copy width.
+ *
+ * The text column lives inside a centred max-width container while the video
+ * is positioned against the viewport, so a plain percentage drifts apart from
+ * the frame as the screen widens. This resolves the container's own gutter and
+ * subtracts it, which holds the gap at every width instead of only the one it
+ * was eyeballed at.
+ */
+@media (min-width: 768px) {
+  .hero-copy {
+    --hero-gutter: max(2.5rem, calc((100vw - 1800px) / 2 + 2.5rem));
+    max-width: calc(47vw - var(--hero-gutter) - 2.5rem);
+  }
+}
+
+/* Media containers never show a raw edge */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-charcoal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-inner { transform: none !important; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

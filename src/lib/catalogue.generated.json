@@ -1,0 +1,571 @@
+{
+  "groups": [
+    {
+      "key": "seating",
+      "slug": "seating",
+      "title": "Seating",
+      "blurb": "Where you sit.",
+      "intro": "Sofas, chairs and anything else that takes your weight."
+    },
+    {
+      "key": "surfaces",
+      "slug": "surfaces",
+      "title": "Surfaces",
+      "blurb": "Where things rest.",
+      "intro": "Tables and the smaller surfaces that gather around them."
+    },
+    {
+      "key": "storage",
+      "slug": "storage",
+      "title": "Storage",
+      "blurb": "Where things live.",
+      "intro": "Joinery meant to disappear into the architecture."
+    },
+    {
+      "key": "rest",
+      "slug": "rest",
+      "title": "Rest",
+      "blurb": "Where the day is set down.",
+      "intro": "Beds and the quiet rooms they belong to."
+    },
+    {
+      "key": "light",
+      "slug": "lighting",
+      "title": "Lighting",
+      "blurb": "How the room reads after dark.",
+      "intro": "Light treated as a material — hung, aimed and dimmed like any other surface."
+    },
+    {
+      "key": "rooms",
+      "slug": "rooms",
+      "title": "Rooms",
+      "blurb": "Complete interiors, for reference.",
+      "intro": "Rooms photographed as they are lived in."
+    },
+    {
+      "key": "more",
+      "slug": "more",
+      "title": "More",
+      "blurb": "Everything else.",
+      "intro": ""
+    }
+  ],
+  "categories": [
+    {
+      "slug": "sofa",
+      "title": "Sofas",
+      "tagline": "Curated seating",
+      "intro": "A study in comfort, proportion and material.",
+      "group": "seating",
+      "story": {
+        "headline": "Designed to anchor the room.",
+        "materials": "Kiln-dried hardwood frames, feather-down seats, upholstery in wool, bouclé or velvet.",
+        "space": "For long rooms, and longer evenings."
+      },
+      "count": 9,
+      "cover": "/collections/sofa/sofa-04.jpg",
+      "coverWidth": 735,
+      "coverHeight": 688,
+      "products": [
+        {
+          "id": "sofa-01",
+          "name": "Sofa No. 01",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-01.jpg",
+          "width": 736,
+          "height": 1104,
+          "portrait": true,
+          "kb": 34,
+          "source": "sofa/download (1).jfif",
+          "sourceSize": "736x1104"
+        },
+        {
+          "id": "sofa-02",
+          "name": "Sofa No. 02",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-02.jpg",
+          "width": 736,
+          "height": 1104,
+          "portrait": true,
+          "kb": 81,
+          "source": "sofa/download (2).jfif",
+          "sourceSize": "736x1104"
+        },
+        {
+          "id": "sofa-03",
+          "name": "Sofa No. 03",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-03.jpg",
+          "width": 736,
+          "height": 920,
+          "portrait": true,
+          "kb": 93,
+          "source": "sofa/download (3).jfif",
+          "sourceSize": "736x920"
+        },
+        {
+          "id": "sofa-04",
+          "name": "Sofa No. 04",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-04.jpg",
+          "width": 735,
+          "height": 688,
+          "portrait": false,
+          "kb": 65,
+          "source": "sofa/download (4).jfif",
+          "sourceSize": "735x688"
+        },
+        {
+          "id": "sofa-05",
+          "name": "Sofa No. 05",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-05.jpg",
+          "width": 736,
+          "height": 1104,
+          "portrait": true,
+          "kb": 34,
+          "source": "sofa/download.jfif",
+          "sourceSize": "736x1104"
+        },
+        {
+          "id": "sofa-06",
+          "name": "Sofa No. 06",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-06.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 38,
+          "source": "sofa/inside-weather-Uxqlfigh6oE-unsplash.jpg",
+          "sourceSize": "10924x16384"
+        },
+        {
+          "id": "sofa-07",
+          "name": "Sofa No. 07",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-07.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 101,
+          "source": "sofa/jean-philippe-delberghe-T5BF4OyQLwU-unsplash.jpg",
+          "sourceSize": "4419x6628"
+        },
+        {
+          "id": "sofa-08",
+          "name": "Sofa No. 08",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-08.jpg",
+          "width": 1800,
+          "height": 1125,
+          "portrait": false,
+          "kb": 185,
+          "source": "sofa/prydumano-design-VZ2z8ozzy10-unsplash.jpg",
+          "sourceSize": "4000x2500"
+        },
+        {
+          "id": "sofa-09",
+          "name": "Sofa No. 09",
+          "note": "Curated seating",
+          "src": "/collections/sofa/sofa-09.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 153,
+          "source": "sofa/roberto-nickson-rEJxpBskj3Q-unsplash.jpg",
+          "sourceSize": "3648x5472"
+        }
+      ]
+    },
+    {
+      "slug": "chair",
+      "title": "Chairs",
+      "tagline": "Comfort and character",
+      "intro": "Where posture, weight and hand meet.",
+      "group": "seating",
+      "story": {
+        "headline": "The piece you notice last and use most.",
+        "materials": "Solid oak and ash, shaped by hand where the hand lands.",
+        "space": "For a reading corner, a desk, the head of a table."
+      },
+      "count": 6,
+      "cover": "/collections/chair/chair-01.jpg",
+      "coverWidth": 736,
+      "coverHeight": 981,
+      "products": [
+        {
+          "id": "chair-01",
+          "name": "Chair No. 01",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-01.jpg",
+          "width": 736,
+          "height": 981,
+          "portrait": true,
+          "kb": 42,
+          "source": "chair/Accent chair.jfif",
+          "sourceSize": "736x981"
+        },
+        {
+          "id": "chair-02",
+          "name": "Chair No. 02",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-02.jpg",
+          "width": 524,
+          "height": 533,
+          "portrait": true,
+          "kb": 45,
+          "source": "chair/download (1).jfif",
+          "sourceSize": "524x533"
+        },
+        {
+          "id": "chair-03",
+          "name": "Chair No. 03",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-03.jpg",
+          "width": 736,
+          "height": 777,
+          "portrait": true,
+          "kb": 47,
+          "source": "chair/download (2).jfif",
+          "sourceSize": "736x777"
+        },
+        {
+          "id": "chair-04",
+          "name": "Chair No. 04",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-04.jpg",
+          "width": 736,
+          "height": 736,
+          "portrait": true,
+          "kb": 30,
+          "source": "chair/download (3).jfif",
+          "sourceSize": "736x736"
+        },
+        {
+          "id": "chair-05",
+          "name": "Chair No. 05",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-05.jpg",
+          "width": 735,
+          "height": 1069,
+          "portrait": true,
+          "kb": 20,
+          "source": "chair/download (4).jfif",
+          "sourceSize": "735x1069"
+        },
+        {
+          "id": "chair-06",
+          "name": "Chair No. 06",
+          "note": "Comfort and character",
+          "src": "/collections/chair/chair-06.jpg",
+          "width": 720,
+          "height": 847,
+          "portrait": true,
+          "kb": 55,
+          "source": "chair/download.jfif",
+          "sourceSize": "720x847"
+        }
+      ]
+    },
+    {
+      "slug": "almira",
+      "title": "Wardrobes",
+      "tagline": "Refined storage",
+      "intro": "Storage that disappears into the architecture.",
+      "group": "storage",
+      "story": {
+        "headline": "Storage that disappears into the wall.",
+        "materials": "Veneered panels, soft-close joinery, handles turned by hand or left off entirely.",
+        "space": "For bedrooms where the architecture should speak first."
+      },
+      "count": 6,
+      "cover": "/collections/almira/almira-01.jpg",
+      "coverWidth": 736,
+      "coverHeight": 985,
+      "products": [
+        {
+          "id": "almira-01",
+          "name": "Wardrobe No. 01",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-01.jpg",
+          "width": 736,
+          "height": 985,
+          "portrait": true,
+          "kb": 46,
+          "source": "almira/almari last dress ke sath#like and subscribe.jfif",
+          "sourceSize": "736x985"
+        },
+        {
+          "id": "almira-02",
+          "name": "Wardrobe No. 02",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-02.jpg",
+          "width": 736,
+          "height": 1103,
+          "portrait": true,
+          "kb": 73,
+          "source": "almira/Beautiful Wardrobe design.jfif",
+          "sourceSize": "736x1103"
+        },
+        {
+          "id": "almira-03",
+          "name": "Wardrobe No. 03",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-03.jpg",
+          "width": 735,
+          "height": 910,
+          "portrait": true,
+          "kb": 43,
+          "source": "almira/download (1).jfif",
+          "sourceSize": "735x910"
+        },
+        {
+          "id": "almira-04",
+          "name": "Wardrobe No. 04",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-04.jpg",
+          "width": 736,
+          "height": 1308,
+          "portrait": true,
+          "kb": 38,
+          "source": "almira/download (2).jfif",
+          "sourceSize": "736x1308"
+        },
+        {
+          "id": "almira-05",
+          "name": "Wardrobe No. 05",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-05.jpg",
+          "width": 474,
+          "height": 620,
+          "portrait": true,
+          "kb": 31,
+          "source": "almira/download (3).jfif",
+          "sourceSize": "474x620"
+        },
+        {
+          "id": "almira-06",
+          "name": "Wardrobe No. 06",
+          "note": "Refined storage",
+          "src": "/collections/almira/almira-06.jpg",
+          "width": 736,
+          "height": 843,
+          "portrait": true,
+          "kb": 38,
+          "source": "almira/download.jfif",
+          "sourceSize": "736x843"
+        }
+      ]
+    },
+    {
+      "slug": "bed",
+      "title": "Beds",
+      "tagline": "The quietest room",
+      "intro": "Where the day is set down.",
+      "group": "rest",
+      "story": {
+        "headline": "Where the day is set down.",
+        "materials": "Upholstered platforms on low frames, in linen and undyed wool.",
+        "space": "For rooms kept deliberately quiet."
+      },
+      "count": 1,
+      "cover": "/collections/bed/bed-01.jpg",
+      "coverWidth": 1440,
+      "coverHeight": 1800,
+      "products": [
+        {
+          "id": "bed-01",
+          "name": "Bed No. 01",
+          "note": "The quietest room",
+          "src": "/collections/bed/bed-01.jpg",
+          "width": 1440,
+          "height": 1800,
+          "portrait": true,
+          "kb": 298,
+          "source": "bed/spacejoy-eyEy5YZhSvU-unsplash.jpg",
+          "sourceSize": "4800x6000"
+        }
+      ]
+    },
+    {
+      "slug": "chandeliers",
+      "title": "Chandeliers",
+      "tagline": "Held light",
+      "intro": "Light gathered into a single object, hung where the room can carry it.",
+      "group": "light",
+      "story": {
+        "headline": "The one thing a room looks up at.",
+        "materials": "Hand-blown glass and cut crystal on brass or blackened steel armatures.",
+        "space": "For stairwells, long tables and double-height rooms."
+      },
+      "count": 7,
+      "cover": "/collections/chandeliers/chandeliers-04.jpg",
+      "coverWidth": 1800,
+      "coverHeight": 1200,
+      "products": [
+        {
+          "id": "chandeliers-01",
+          "name": "Chandelier No. 01",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-01.jpg",
+          "width": 1013,
+          "height": 1800,
+          "portrait": true,
+          "kb": 227,
+          "source": "chandilier/alessia-cocconi-vf8vmRXy3Jk-unsplash.jpg",
+          "sourceSize": "2916x5184"
+        },
+        {
+          "id": "chandeliers-02",
+          "name": "Chandelier No. 02",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-02.jpg",
+          "width": 1238,
+          "height": 1800,
+          "portrait": true,
+          "kb": 210,
+          "source": "chandilier/blickpixel-glowing-453783_1920.jpg",
+          "sourceSize": "1321x1920"
+        },
+        {
+          "id": "chandeliers-03",
+          "name": "Chandelier No. 03",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-03.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 172,
+          "source": "chandilier/freddie-martyn-0o4vbRF6xco-unsplash.jpg",
+          "sourceSize": "3456x5184"
+        },
+        {
+          "id": "chandeliers-04",
+          "name": "Chandelier No. 04",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-04.jpg",
+          "width": 1800,
+          "height": 1200,
+          "portrait": false,
+          "kb": 81,
+          "source": "chandilier/kundennote_com-ceiling-lamp-335975_1920.jpg",
+          "sourceSize": "1920x1280"
+        },
+        {
+          "id": "chandeliers-05",
+          "name": "Chandelier No. 05",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-05.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 155,
+          "source": "chandilier/marcos-ferreira-pIKMAutoksY-unsplash.jpg",
+          "sourceSize": "3187x4780"
+        },
+        {
+          "id": "chandeliers-06",
+          "name": "Chandelier No. 06",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-06.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 318,
+          "source": "chandilier/tsuyoshi-kozu-4xKg5-U4tnw-unsplash.jpg",
+          "sourceSize": "2000x3000"
+        },
+        {
+          "id": "chandeliers-07",
+          "name": "Chandelier No. 07",
+          "note": "Held light",
+          "src": "/collections/chandeliers/chandeliers-07.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 183,
+          "source": "chandilier/wesley-shen-2h36PYpcUkg-unsplash.jpg",
+          "sourceSize": "4127x6191"
+        }
+      ]
+    },
+    {
+      "slug": "interior",
+      "title": "Interiors",
+      "tagline": "Rooms in full",
+      "intro": "Complete rooms, photographed as they are lived in.",
+      "group": "rooms",
+      "story": {
+        "headline": "The pieces, in place.",
+        "materials": "Complete installations, photographed as they are lived in.",
+        "space": "Reference rather than a range."
+      },
+      "count": 5,
+      "cover": "/collections/interior/interior-01.jpg",
+      "coverWidth": 736,
+      "coverHeight": 1308,
+      "products": [
+        {
+          "id": "interior-01",
+          "name": "Interior No. 01",
+          "note": "Rooms in full",
+          "src": "/collections/interior/interior-01.jpg",
+          "width": 736,
+          "height": 1308,
+          "portrait": true,
+          "kb": 78,
+          "source": "interior/download (1).jfif",
+          "sourceSize": "736x1308"
+        },
+        {
+          "id": "interior-02",
+          "name": "Interior No. 02",
+          "note": "Rooms in full",
+          "src": "/collections/interior/interior-02.jpg",
+          "width": 736,
+          "height": 1104,
+          "portrait": true,
+          "kb": 99,
+          "source": "interior/download.jfif",
+          "sourceSize": "736x1104"
+        },
+        {
+          "id": "interior-03",
+          "name": "Interior No. 03",
+          "note": "Rooms in full",
+          "src": "/collections/interior/interior-03.jpg",
+          "width": 1286,
+          "height": 1800,
+          "portrait": true,
+          "kb": 118,
+          "source": "interior/jean-philippe-delberghe-90eBoEp2tS0-unsplash.jpg",
+          "sourceSize": "4352x6093"
+        },
+        {
+          "id": "interior-04",
+          "name": "Interior No. 04",
+          "note": "Rooms in full",
+          "src": "/collections/interior/interior-04.jpg",
+          "width": 1200,
+          "height": 1800,
+          "portrait": true,
+          "kb": 77,
+          "source": "interior/jean-philippe-delberghe-Ry9WBo3qmoc-unsplash.jpg",
+          "sourceSize": "3732x5598"
+        },
+        {
+          "id": "interior-05",
+          "name": "Interior No. 05",
+          "note": "Rooms in full",
+          "src": "/collections/interior/interior-05.jpg",
+          "width": 736,
+          "height": 1013,
+          "portrait": true,
+          "kb": 77,
+          "source": "interior/Open-Concept Living Room and Kitchen Ideas for a Seamless, Spacious Home Makeover.jfif",
+          "sourceSize": "736x1013"
+        }
+      ]
+    }
+  ]
+}

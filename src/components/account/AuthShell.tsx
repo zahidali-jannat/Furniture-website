@@ -62,7 +62,7 @@ export default function AuthShell({
 
           <div className="max-w-sm">
             <p className="display text-[2.1rem] leading-[1.05] text-bone">{caption}</p>
-            <p className="eyebrow mt-5 text-[0.6rem] text-bone/55">
+            <p className="eyebrow mt-5 text-[0.72rem] text-bone/55">
               {BRAND.established} · {BRAND.city}
             </p>
           </div>
@@ -78,7 +78,7 @@ export default function AuthShell({
             {BRAND.name}
           </Link>
 
-          <p className="eyebrow text-[0.6rem] text-charcoal/40">{eyebrow}</p>
+          <p className="eyebrow text-[0.72rem] text-charcoal/65">{eyebrow}</p>
 
           <h1 className="display mt-5 text-[2.6rem] leading-[0.98] text-charcoal sm:text-[3rem]">
             {title}
@@ -91,7 +91,7 @@ export default function AuthShell({
           </h1>
 
           {intro && (
-            <p className="mt-6 max-w-[24rem] text-[0.9rem] leading-relaxed text-charcoal/55">
+            <p className="mt-6 max-w-[24rem] text-[1rem] leading-relaxed text-charcoal/75">
               {intro}
             </p>
           )}

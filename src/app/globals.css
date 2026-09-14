@@ -13,6 +13,14 @@
   --color-ink:        #0b0a09;
   --color-smoke:      #8a8378;
 
+  /* Reading tones for the account area.
+     Clay and olive are sampled from the photographs and are right as accents —
+     a dot, a rule, a hover — but against the bone ground they measure 3.1:1 and
+     4.5:1, which is too thin for a sentence somebody has to read. These two are
+     the same hues carried down to 5.9:1 and 6.6:1, and are used only for text. */
+  --color-rust:       #8a4a22;
+  --color-moss:       #55563c;
+
   --font-display: var(--font-display), "Times New Roman", serif;
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 

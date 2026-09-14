@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { verifiedUser } from "@/lib/auth/session";
-import { Empty } from "@/components/account/Panels";
-import { QuietButton } from "@/components/account/Buttons";
+import { Empty, PageHeading } from "@/components/account/Panels";
 import SavedGrid, { type SavedItem } from "@/components/account/SavedGrid";
+import { getCategory } from "@/lib/catalogue";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,11 @@ export default async function SavedPage() {
           name: true,
           note: true,
           category: { select: { slug: true, title: true } },
-          images: { where: { primary: true }, take: 1, select: { url: true, width: true, height: true } },
+          images: {
+            where: { primary: true },
+            take: 1,
+            select: { url: true, width: true, height: true },
+          },
         },
       },
     },
@@ -34,6 +38,9 @@ export default async function SavedPage() {
     slug: row.product.slug,
     name: row.product.name,
     note: row.note ?? row.product.note,
+    // Materials are written per category in the folder catalogue rather than
+    // per piece, so they come from there rather than from the mirror.
+    material: getCategory(row.product.category.slug)?.story?.materials ?? null,
     categorySlug: row.product.category.slug,
     categoryTitle: row.product.category.title,
     image: row.product.images[0] ?? null,
@@ -41,28 +48,40 @@ export default async function SavedPage() {
   }));
 
   return (
-    <div className="space-y-14">
-      <header>
-        <p className="eyebrow text-[0.6rem] text-charcoal/40">Saved</p>
-        <h1 className="display mt-6 text-[clamp(2.2rem,5vw,3.4rem)] leading-[0.98] text-charcoal">
-          Pieces you are
-          <br />
-          <em className="font-normal italic">thinking about.</em>
-        </h1>
-        <p className="mt-6 max-w-lg text-[0.9rem] leading-relaxed text-charcoal/50">
-          {items.length > 0
-            ? "Kept here until you decide. Nothing is reserved and nothing expires."
-            : "Nothing here yet."}
-        </p>
-      </header>
+    <div>
+      <PageHeading
+        eyebrow="Saved pieces"
+        title="Pieces you are"
+        italic="thinking about."
+        intro={
+          items.length > 0
+            ? "Kept here until you decide. Nothing is reserved and nothing expires — ask about any of them and the enquiry arrives with the piece attached."
+            : undefined
+        }
+        aside={
+          items.length > 0 ? (
+            <p className="text-[0.85rem] text-charcoal/65">
+              {items.length} {items.length === 1 ? "piece" : "pieces"}
+            </p>
+          ) : null
+        }
+      />
 
       {items.length === 0 ? (
         <Empty
-          line="When you find something worth coming back to, save it and it will be waiting here."
+          line="You have not saved any pieces yet."
           cta={
-            <Link href="/collections">
-              <QuietButton type="button">Explore the collection</QuietButton>
-            </Link>
+            <div className="space-y-6">
+              <p className="mx-auto max-w-sm text-[0.92rem] leading-relaxed text-charcoal/65">
+                Save furniture that speaks to your space and return to it whenever you are ready.
+              </p>
+              <Link
+                href="/collections"
+                className="eyebrow inline-block border border-charcoal/25 px-7 py-3.5 text-[0.74rem] text-charcoal transition-colors duration-700 hover:border-charcoal"
+              >
+                Explore collections
+              </Link>
+            </div>
           }
         />
       ) : (

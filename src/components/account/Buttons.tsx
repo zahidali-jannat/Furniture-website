@@ -20,7 +20,7 @@ export function PrimaryButton({
       disabled={busy || rest.disabled}
       className={[
         "group relative w-full overflow-hidden border border-charcoal bg-charcoal px-8 py-4",
-        "eyebrow text-[0.68rem] text-bone transition-colors duration-700",
+        "eyebrow text-[0.76rem] text-bone transition-colors duration-700",
         "hover:text-charcoal disabled:cursor-wait disabled:opacity-70",
         rest.className ?? "",
       ].join(" ")}
@@ -46,7 +46,7 @@ export function QuietButton({
       disabled={busy || rest.disabled}
       className={[
         "group relative overflow-hidden border border-charcoal/25 px-7 py-3.5",
-        "eyebrow text-[0.64rem] text-charcoal transition-colors duration-700",
+        "eyebrow text-[0.74rem] text-charcoal transition-colors duration-700",
         "hover:border-charcoal disabled:opacity-50",
         rest.className ?? "",
       ].join(" ")}
@@ -70,7 +70,7 @@ export function GoogleButton({ href, label = "Continue with Google" }: { href: s
       style={{ transitionTimingFunction: "var(--ease-lux)" }}
     >
       <GoogleMark />
-      <span className="eyebrow text-[0.68rem] text-charcoal">{label}</span>
+      <span className="eyebrow text-[0.76rem] text-charcoal">{label}</span>
     </a>
   );
 }
@@ -103,7 +103,7 @@ export function Divider({ label = "or" }: { label?: string }) {
   return (
     <div className="flex items-center gap-4" aria-hidden="true">
       <span className="h-px flex-1 bg-charcoal/12" />
-      <span className="eyebrow text-[0.6rem] text-charcoal/35">{label}</span>
+      <span className="eyebrow text-[0.72rem] text-charcoal/65">{label}</span>
       <span className="h-px flex-1 bg-charcoal/12" />
     </div>
   );

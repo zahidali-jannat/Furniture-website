@@ -52,12 +52,12 @@ export default function ResetForm({ token }: { token: string }) {
     return (
       <div aria-live="polite" className="border-t border-charcoal/12 pt-7">
         <p className="display text-[1.6rem] leading-tight text-charcoal">That is done.</p>
-        <p className="mt-3 text-[0.88rem] leading-relaxed text-charcoal/55">
+        <p className="mt-3 text-[0.96rem] leading-relaxed text-charcoal/75">
           Your new password is set, and every device that was signed in has been signed out.
         </p>
         <Link
           href="/login"
-          className="eyebrow mt-7 inline-block border border-charcoal px-8 py-4 text-[0.68rem] text-charcoal transition-colors duration-700 hover:bg-charcoal hover:text-bone"
+          className="eyebrow mt-7 inline-block border border-charcoal px-8 py-4 text-[0.76rem] text-charcoal transition-colors duration-700 hover:bg-charcoal hover:text-bone"
           style={{ transitionTimingFunction: "var(--ease-lux)" }}
         >
           Sign in

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { BRAND, CONTACT, NAV, telHref } from "@/lib/brand";
 import { ScrollTrigger, isCoarsePointer, prefersReducedMotion } from "@/lib/gsap";
+import AccountMenu from "@/components/account/AccountMenu";
 
 /**
  * The bar is fixed and never blends. `mix-blend-mode` on a fixed element
@@ -179,12 +180,11 @@ export default function Nav() {
           <NavLink href={onHome ? "#contact" : "/#contact"}>Enquire</NavLink>
           <span aria-hidden="true" className="hidden h-3 w-px bg-current/20 md:block" />
           {/*
-            One link for both states. Every page on this site is cached, so a bar
-            that said "Sign in" or "Your account" would have to decide after
-            hydration and flicker on the way. /account is the honest answer to
-            both: signed in it opens, signed out it asks.
+            One label for both states, and nothing fetched until it is opened —
+            every page here is cached, and a bar that decided between "Sign in"
+            and a name after hydration would flicker on the way.
           */}
-          <NavLink href="/account">Account</NavLink>
+          <AccountMenu tone={onDark ? "dark" : "light"} />
         </div>
       </nav>
     </header>

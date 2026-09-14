@@ -31,7 +31,7 @@ export default function SignOutButton({ className }: { className?: string }) {
       disabled={busy}
       className={
         className ??
-        "eyebrow text-[0.63rem] text-charcoal/40 transition-colors duration-500 hover:text-charcoal disabled:opacity-50"
+        "eyebrow text-[0.74rem] text-charcoal/65 transition-colors duration-500 hover:text-charcoal disabled:opacity-50"
       }
     >
       {busy ? "Signing out…" : "Sign out"}

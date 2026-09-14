@@ -95,7 +95,7 @@ export default function SaveButton({ slug, name }: { slug: string; name: string 
       onClick={toggle}
       aria-pressed={saved ?? false}
       aria-label={saved ? `Remove ${name} from your saved pieces` : `Save ${name} to your account`}
-      className="group inline-flex items-center gap-3 text-left eyebrow text-charcoal/50 transition-colors duration-500 hover:text-charcoal"
+      className="group inline-flex items-center gap-3 text-left eyebrow text-charcoal/75 transition-colors duration-500 hover:text-charcoal"
       style={{ transitionTimingFunction: "var(--ease-lux)" }}
     >
       <span

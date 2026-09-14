@@ -14,16 +14,30 @@ touching the database.
 ## 1. What a visitor sees
 
 ```
-/login                     sign in, or continue with Google
-/create-account            name, email, phone, password
-/create-account/verify     the two codes
-/forgot-password           ask for a reset link
-/reset-password?token=…    choose a new password
-/account                   overview
-/account/saved             pieces they have saved
-/account/enquiries         what they have asked us
-/account/settings          details, password, devices, closing the account
+/login                        sign in, or continue with Google
+/create-account               name, email, phone, password
+/create-account/verify        the codes
+/forgot-password              ask for a reset link
+/reset-password?token=…       choose a new password
+
+/account                      overview — figures, quick actions, recent activity
+/account/profile              name, number, what is confirmed, what we hold
+/account/saved                saved pieces, and asking about one
+/account/enquiries            every enquiry, by reference
+/account/enquiries/MN-…       one enquiry in full, with our reply
+/account/consultations        appointments: upcoming, past, and asking for a time
+/account/preferences          what we may write about
+/account/security             password, Google, devices, closing the account
+/account/help                 how to reach a person, and the questions we are asked
 ```
+
+The navigation is a column in the margin on desktop and a scrollable row of
+words on a phone. It lists only what the site can fill: there is no Orders and
+no Addresses section, because there is no checkout and nothing to deliver to.
+The tables for both are ready when the shop is — see "Not here yet" at the end.
+
+`/account/settings` redirects to `/account/profile`, so older links still land
+somewhere sensible.
 
 **Opening an account.** Everything is asked for on one screen. We then send a
 six-digit code to the address and another to the phone. Both have to come back
@@ -45,7 +59,31 @@ pressed. Someone who already has an account with the same address gets Google
 added to it rather than a second account.
 
 **Saving a piece** is a link on any product page. Pressed while signed out, it
-remembers where you were, asks you to sign in, and brings you back.
+remembers where you were, asks you to sign in, and brings you back. From the
+saved list, "Ask about it" opens a two-line form and files an enquiry against
+that piece — the name, address and number come from the session, so all that is
+asked for is the question.
+
+**Consultations are requested, not booked.** A member proposes a kind, a day
+and a time; the studio confirms it by hand and the row says "awaiting
+confirmation" until it does. Moving a confirmed appointment puts it back to
+awaiting confirmation, because the studio has not agreed to the new time yet. A
+self-service calendar handing out confirmations nobody had agreed to would be
+the one dishonest thing in the whole account area.
+
+**Times are showroom times.** A `datetime-local` input sends a naive
+"2026-10-03T15:00" with no zone, and three clocks could claim it: the
+visitor's, the server's and the showroom's. Only the last one matters —
+somebody has to walk through a door in Copenhagen — so the string is read as
+Copenhagen time, stored as the instant that represents, and printed back in
+Copenhagen time. What you type is what the clock on the showroom wall will say.
+`src/lib/account/zone.ts` is where that happens, and the opening-hours check
+reads the same clock.
+
+**Recently viewed** is kept in the browser's own storage and never sent
+anywhere. Browsing history is the most personal thing a furniture site could
+collect and the least necessary: the only job it does here is helping somebody
+find their way back to a chair, and a device can remember that by itself.
 
 ---
 
@@ -140,16 +178,76 @@ src/lib/auth/
   verification.ts            email and phone codes
   google.ts                  the OAuth round trip
   http.ts                    response shapes, rate limiting
+src/lib/account/
+  enquiries.ts               statuses, listing, one enquiry, creating one
+  consultations.ts           kinds, opening hours, requesting and listing
+  preferences.ts             the switches and their defaults
+  reference.ts               MN-2609-4KTQ, and retrying a collision
+  zone.ts                    showroom time, in and out
+  format.ts                  how a date is written
+  validation.ts              the shape of every portal request (Zod)
 src/app/api/auth/*           register, verify, login, refresh, password, google
-src/app/api/account/*        profile, favourites, enquiries, sessions, delete
+src/app/api/account/*        profile, favourites, enquiries, consultations,
+                             preferences, sessions, delete
 src/middleware.ts            the gate in front of /account
-src/components/account/*     the forms and the dashboard
+src/components/account/*     the portal: sidebar, forms, panels, header menu
 ```
+
+### The endpoints
+
+```
+GET    /api/auth/me                          who is signed in
+PATCH  /api/account/profile                  name and number
+GET    /api/account/favourites               saved pieces
+POST   /api/account/favourites               save one
+DELETE /api/account/favourites?slug=…        remove one
+GET    /api/account/enquiries                every enquiry
+POST   /api/account/enquiries                start one
+GET    /api/account/enquiries/MN-…           one, in full
+GET    /api/account/consultations            upcoming and past
+POST   /api/account/consultations            ask for a time
+PATCH  /api/account/consultations/MN-…       move it
+DELETE /api/account/consultations/MN-…       cancel it
+GET    /api/account/preferences              the switches
+PATCH  /api/account/preferences              change one (partial bodies only)
+GET    /api/account/sessions                 signed-in devices
+DELETE /api/account/sessions                 sign out everywhere else
+POST   /api/account/delete                   close the account
+```
+
+Every one of them starts from the session and scopes its query by that user id.
+No route takes a user id from a request, and a reference somebody guessed is
+still not theirs to read: the reference and the owner are matched in the same
+query.
+
+The pages themselves do not call these. They are server components that read
+the database directly in one pass, so a member's data never travels as JSON a
+cache could keep and nothing arrives after a spinner. The endpoints exist for
+the things a page cannot do — changing something, and the two panels that
+genuinely need to fetch (devices, and the header menu).
+
+### Legibility
+
+The portal's text tones are chosen by measurement, not by eye. Charcoal at 40%
+over the bone ground measures 2.5:1 — it looks tasteful in a mockup and
+disappears on a real screen in daylight. Every piece of text in the account area
+is at 65% or above, which is where the ratio crosses 4.5:1, and nothing is set
+below 0.68rem. Clay and olive stay as accents (a dot, a rule, a hover) and two
+darker relatives, `rust` and `moss`, carry error and confirmation text at 5.9:1
+and 6.6:1.
+
+There is a check for this: it loads every account page in a real browser, walks
+each text node, and compares the rendered colour against the background actually
+behind it. It currently reports every element passing AA.
 
 ### The tables
 
 Accounts: `User`, `AuthProvider`, `EmailVerificationToken`, `PhoneOtp`,
-`PasswordResetToken`, `Session`.
+`PasswordResetToken`, `Session`, `UserPreference`.
+
+The portal: `Enquiry` (with a quotable `reference`, a status the workshop moves
+along, and one written `response`) and `Consultation` (a requested time, a
+confirmed one kept separately, and a reference of its own).
 
 Catalogue: `Collection`, `Category`, `Product`, `ProductImage`,
 `ProductVariant`, `SavedProduct`, `Enquiry`.
@@ -218,6 +316,13 @@ against Google's published keys rather than trusted because it arrived over
 HTTPS. An unverified `email` claim is refused. The visitor's Google password is
 typed on accounts.google.com and nowhere else.
 
+**Consent is given, not assumed.** Every promotional preference starts off, and
+there is no row in `UserPreference` at all until somebody expresses one. The two
+that default to on — enquiry replies and consultation reminders — answer
+something the person started, which is not marketing. Each switch saves on its
+own and sends only the field that changed, so a page left open in another tab
+cannot quietly re-consent to four other things with values it loaded an hour ago.
+
 **What the server tells you when something breaks**: one sentence the visitor
 can act on. The cause goes to the log. In development — and only there —
 unsendable codes and SMTP explanations are returned as well, so the flow can be
@@ -238,16 +343,26 @@ walked through without credentials.
 
 ---
 
-## 6. What is deliberately not here
+## 6. Not here yet, and why
 
+- **Orders and addresses.** There is no checkout, so there is nothing to order
+  and nowhere to deliver it. Both sections are absent from the navigation
+  rather than present and empty — a section that has never held anything
+  teaches people not to look at the others. `ProductVariant` can hold a price
+  when there is one to hold, and an `Address` table is a migration away.
+- **A notification centre.** Nothing generates notifications. The status on an
+  enquiry and on a consultation carries the same information in the place the
+  person is already looking, and an empty bell is furniture.
+- **A message thread on an enquiry.** The workshop answers by email. One
+  written reply on the record is honest; a chat window nobody is watching is
+  not. `Enquiry.response` is where that reply lives.
+- **A studio-side admin area.** Statuses are moved by hand in the database for
+  now. `UserStatus`, `EnquiryStatus` and `ConsultationStatus` are the hooks for
+  when there is a screen for it.
 - **Changing the address on an account.** Doing it properly means proving the
   new address before the old one stops working. That is a flow, not a form
-  field, so settings says to write to the workshop instead of pretending.
-- **Roles and an admin area.** Nothing in the site needs one yet. `UserStatus`
-  and the `Enquiry.status` column are the hooks for when it does.
+  field, so Profile says to write to the workshop instead of pretending.
 - **Two-factor authentication beyond the phone code at registration.** The
   pieces are in place — `PhoneOtp`, the code input, the rate limits — but
   turning it into a sign-in step is a decision about how much friction the
   brand wants, not a technical gap.
-- **Prices and a basket.** The catalogue has never claimed a price and this
-  does not change that. `ProductVariant` can hold one when there is one to hold.

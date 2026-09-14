@@ -49,11 +49,11 @@ export default function ForgotForm() {
     return (
       <div aria-live="polite" className="border-t border-charcoal/12 pt-7">
         <p className="display text-[1.6rem] leading-tight text-charcoal">Check your inbox.</p>
-        <p className="mt-3 text-[0.88rem] leading-relaxed text-charcoal/55">
+        <p className="mt-3 text-[0.96rem] leading-relaxed text-charcoal/75">
           If that address has an account with us, a link to set a new password is on its way.
           It expires in an hour.
         </p>
-        <p className="mt-5 text-[0.75rem] leading-relaxed text-charcoal/40">
+        <p className="mt-5 text-[0.85rem] leading-relaxed text-charcoal/65">
           Nothing arrived? Check the spam folder, then try again — the link is only sent to
           addresses we hold.
         </p>

@@ -70,9 +70,9 @@ export default function SessionsPanel() {
   return (
     <div className="max-w-xl">
       {devices === null ? (
-        <p className="text-[0.82rem] text-charcoal/35">Looking…</p>
+        <p className="text-[0.92rem] text-charcoal/65">Looking…</p>
       ) : devices.length === 0 ? (
-        <p className="text-[0.82rem] text-charcoal/45">No other devices.</p>
+        <p className="text-[0.92rem] text-charcoal/70">No other devices.</p>
       ) : (
         <ul className="border-t border-charcoal/8">
           {devices.map((device) => (
@@ -80,8 +80,8 @@ export default function SessionsPanel() {
               key={device.id}
               className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-charcoal/8 py-3.5"
             >
-              <span className="text-[0.86rem] text-charcoal/80">{device.device}</span>
-              <span className="text-[0.72rem] text-charcoal/35">
+              <span className="text-[0.95rem] text-charcoal/80">{device.device}</span>
+              <span className="text-[0.82rem] text-charcoal/65">
                 last used{" "}
                 {new Date(device.lastUsedAt).toLocaleDateString("en-GB", {
                   day: "numeric",

@@ -35,9 +35,9 @@ export default function AccountNav() {
                 className={[
                   // Tighter on a narrow screen so all four labels fit at 390px
                   // rather than the last one sliding off the edge.
-                  "relative block whitespace-nowrap px-2 py-2 eyebrow text-[0.58rem] tracking-[0.18em] transition-colors duration-500",
-                  "sm:px-3 sm:text-[0.63rem] sm:tracking-[0.26em]",
-                  active ? "text-charcoal" : "text-charcoal/40 hover:text-charcoal/75",
+                  "relative block whitespace-nowrap px-2 py-2 eyebrow text-[0.7rem] tracking-[0.18em] transition-colors duration-500",
+                  "sm:px-3 sm:text-[0.74rem] sm:tracking-[0.26em]",
+                  active ? "text-charcoal" : "text-charcoal/65 hover:text-charcoal/85",
                 ].join(" ")}
                 style={{ transitionTimingFunction: "var(--ease-lux)" }}
               >

@@ -139,7 +139,7 @@ export default function RegisterForm({ google, sms }: { google: boolean; sms: bo
           Create an account
         </PrimaryButton>
 
-        <p className="text-[0.72rem] leading-relaxed text-charcoal/40">
+        <p className="text-[0.82rem] leading-relaxed text-charcoal/65">
           {sms
             ? "We send one code to your address and one to your phone. Both are needed before the account opens — it is how we keep a stranger from using your details."
             : "We send a code to your address to confirm it is yours. Text messages are not set up on this server yet, so your number is kept on file and confirmed later."}

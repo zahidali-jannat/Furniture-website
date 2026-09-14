@@ -53,7 +53,7 @@ export default function DeleteAccountPanel({ hasPassword }: { hasPassword: boole
   if (!open) {
     return (
       <div className="max-w-xl">
-        <p className="text-[0.85rem] leading-relaxed text-charcoal/50">
+        <p className="text-[0.95rem] leading-relaxed text-charcoal/75">
           Closing your account removes your details, your saved pieces and every device
           you are signed in on. Enquiries already with the workshop stay, so anything we
           are in the middle of can be finished — they are no longer attached to you.
@@ -61,7 +61,7 @@ export default function DeleteAccountPanel({ hasPassword }: { hasPassword: boole
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-6 text-[0.78rem] text-clay underline decoration-clay/30 underline-offset-4 transition-colors hover:decoration-clay"
+          className="mt-6 text-[0.88rem] text-rust underline decoration-clay/30 underline-offset-4 transition-colors hover:decoration-clay"
         >
           Close my account
         </button>
@@ -70,8 +70,8 @@ export default function DeleteAccountPanel({ hasPassword }: { hasPassword: boole
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="max-w-md space-y-6 border-l border-clay/40 pl-6">
-      <p className="text-[0.85rem] leading-relaxed text-charcoal/55">
+    <form onSubmit={onSubmit} noValidate className="max-w-md space-y-6 border-l border-rust/40 pl-6">
+      <p className="text-[0.95rem] leading-relaxed text-charcoal/75">
         This cannot be undone. Type <span className="text-charcoal">DELETE</span> to confirm.
       </p>
 
@@ -104,7 +104,7 @@ export default function DeleteAccountPanel({ hasPassword }: { hasPassword: boole
         <button
           type="submit"
           disabled={busy}
-          className="border border-clay px-7 py-3.5 eyebrow text-[0.64rem] text-clay transition-colors duration-700 hover:bg-clay hover:text-bone disabled:opacity-50"
+          className="border border-rust px-7 py-3.5 eyebrow text-[0.74rem] text-rust transition-colors duration-700 hover:bg-rust hover:text-bone disabled:opacity-50"
           style={{ transitionTimingFunction: "var(--ease-lux)" }}
         >
           {busy ? "Closing…" : "Close my account"}
@@ -114,7 +114,7 @@ export default function DeleteAccountPanel({ hasPassword }: { hasPassword: boole
           type="button"
           onClick={() => setOpen(false)}
           disabled={busy}
-          className="text-[0.78rem] text-charcoal/45 underline-offset-4 transition-colors hover:text-charcoal hover:underline"
+          className="text-[0.88rem] text-charcoal/70 underline-offset-4 transition-colors hover:text-charcoal hover:underline"
         >
           Keep my account
         </button>

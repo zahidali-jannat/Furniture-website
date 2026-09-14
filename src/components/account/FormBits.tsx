@@ -22,9 +22,9 @@ export function FormNotice({
 }) {
   return (
     <div aria-live="polite" className="min-h-[1.2rem]">
-      {error && <p className="text-[0.78rem] leading-snug text-clay">{error}</p>}
+      {error && <p className="text-[0.88rem] leading-snug text-rust">{error}</p>}
       {success && !error && (
-        <p className="text-[0.78rem] leading-snug text-olive">{success}</p>
+        <p className="text-[0.88rem] leading-snug text-moss">{success}</p>
       )}
       {children}
     </div>

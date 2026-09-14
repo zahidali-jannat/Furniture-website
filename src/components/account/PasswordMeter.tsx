@@ -40,7 +40,7 @@ export default function PasswordMeter({
   return (
     <ul className="grid gap-1.5 pt-1 sm:grid-cols-2">
       {rules.map((rule) => (
-        <li key={rule.label} className="flex items-center gap-2 text-[0.7rem] leading-tight">
+        <li key={rule.label} className="flex items-center gap-2 text-[0.8rem] leading-tight">
           <span
             aria-hidden="true"
             className={[
@@ -48,7 +48,7 @@ export default function PasswordMeter({
               rule.met ? "bg-olive" : "bg-charcoal/25",
             ].join(" ")}
           />
-          <span className={rule.met ? "text-charcoal/55" : "text-charcoal/35"}>{rule.label}</span>
+          <span className={rule.met ? "text-charcoal/75" : "text-charcoal/65"}>{rule.label}</span>
         </li>
       ))}
     </ul>

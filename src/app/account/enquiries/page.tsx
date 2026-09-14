@@ -1,104 +1,89 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
 import { verifiedUser } from "@/lib/auth/session";
-import { Empty } from "@/components/account/Panels";
-import { QuietButton } from "@/components/account/Buttons";
+import { listEnquiries, STATUS } from "@/lib/account/enquiries";
+import { Empty, PageHeading, StatusTag } from "@/components/account/Panels";
+import { longDate } from "@/lib/account/format";
 
 export const dynamic = "force-dynamic";
 
-const STATUS: Record<string, string> = {
-  NEW: "With the workshop",
-  ANSWERED: "Answered",
-  CLOSED: "Closed",
-};
-
 /**
- * Enquiries sent from this address.
+ * Enquiries, as a ledger.
  *
- * Matched on the account id and on the verified address, so anything sent
- * before the account existed still appears — which is usually the first
- * enquiry, the one that brought them here.
+ * One line each: the piece, when it was sent, where it has got to. The
+ * reference is set small and monospaced-by-letterspacing rather than in a
+ * badge, because it is something you read out on the telephone, not a label.
  */
 export default async function EnquiriesPage() {
   const user = await verifiedUser();
   if (!user) return null;
 
-  const enquiries = await prisma.enquiry.findMany({
-    where: { OR: [{ userId: user.id }, { email: user.email }] },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-    select: {
-      id: true,
-      message: true,
-      status: true,
-      createdAt: true,
-      product: { select: { slug: true, name: true, category: { select: { slug: true, title: true } } } },
-    },
-  });
+  const enquiries = await listEnquiries(user);
 
   return (
-    <div className="space-y-14">
-      <header>
-        <p className="eyebrow text-[0.6rem] text-charcoal/40">Enquiries</p>
-        <h1 className="display mt-6 text-[clamp(2.2rem,5vw,3.4rem)] leading-[0.98] text-charcoal">
-          What you have
-          <br />
-          <em className="font-normal italic">asked us.</em>
-        </h1>
-        <p className="mt-6 max-w-lg text-[0.9rem] leading-relaxed text-charcoal/50">
-          We reply within two working days. Everything is answered by the same three people.
-        </p>
-      </header>
+    <div>
+      <PageHeading
+        eyebrow="Enquiries"
+        title="What you have"
+        italic="asked us."
+        intro="We reply within two working days, and everything is answered by the same three people."
+      />
 
       {enquiries.length === 0 ? (
         <Empty
-          line="No enquiries yet. The showroom is open by appointment, Tuesday to Saturday."
+          line="You have not submitted any enquiries yet."
           cta={
-            <Link href="/#contact">
-              <QuietButton type="button">Request a visit</QuietButton>
-            </Link>
+            <div className="space-y-6">
+              <p className="mx-auto max-w-sm text-[0.92rem] leading-relaxed text-charcoal/65">
+                Ask about a piece from its page, or from anything you have saved, and the
+                conversation will be kept here.
+              </p>
+              <Link
+                href="/account/saved"
+                className="eyebrow inline-block border border-charcoal/25 px-7 py-3.5 text-[0.74rem] text-charcoal transition-colors duration-700 hover:border-charcoal"
+              >
+                Your saved pieces
+              </Link>
+            </div>
           }
         />
       ) : (
         <ul className="border-t border-charcoal/12">
           {enquiries.map((enquiry) => (
-            <li
-              key={enquiry.id}
-              className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 border-b border-charcoal/8 py-6"
-            >
-              <div className="min-w-0">
-                <p className="text-[0.92rem] text-charcoal">
-                  {enquiry.product ? (
-                    <Link
-                      href={`/collections/${enquiry.product.category.slug}/${enquiry.product.slug}`}
-                      className="underline decoration-charcoal/20 underline-offset-4 transition-colors hover:decoration-charcoal"
-                    >
-                      {enquiry.product.name}
-                    </Link>
-                  ) : (
-                    "A visit to the showroom"
-                  )}
-                </p>
-                {enquiry.message && (
-                  <p className="mt-2 max-w-xl text-[0.82rem] leading-relaxed text-charcoal/45">
-                    {enquiry.message}
+            <li key={enquiry.reference} className="border-b border-charcoal/8">
+              <Link
+                href={`/account/enquiries/${enquiry.reference}`}
+                className="group flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 py-6"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-[1.1rem] text-charcoal transition-opacity duration-500 group-hover:opacity-65">
+                    {enquiry.product?.name ?? enquiry.subject ?? "A visit to the showroom"}
                   </p>
-                )}
-              </div>
+                  {enquiry.message && (
+                    <p className="mt-2 line-clamp-2 max-w-xl text-[0.92rem] leading-relaxed text-charcoal/70">
+                      {enquiry.message}
+                    </p>
+                  )}
+                  <p className="mt-3 text-[0.8rem] tracking-[0.12em] text-charcoal/70">
+                    {enquiry.reference}
+                  </p>
+                </div>
 
-              <div className="flex items-baseline gap-6">
-                <span className="eyebrow text-[0.55rem] text-charcoal/35">
-                  {enquiry.createdAt.toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    timeZone: "UTC",
-                  })}
-                </span>
-                <span className="text-[0.78rem] text-charcoal/55">
-                  {STATUS[enquiry.status] ?? enquiry.status}
-                </span>
-              </div>
+                <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
+                  <StatusTag
+                    label={STATUS[enquiry.status].label}
+                    tone={
+                      enquiry.status === "RESOLVED"
+                        ? "settled"
+                        : enquiry.status === "CLOSED"
+                          ? "neutral"
+                          : "waiting"
+                    }
+                  />
+                  <span className="text-[0.82rem] text-charcoal/65">
+                    {longDate(enquiry.createdAt)}
+                  </span>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

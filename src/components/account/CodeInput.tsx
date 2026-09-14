@@ -111,7 +111,7 @@ export default function CodeInput({
             "h-14 w-full min-w-0 border-b bg-transparent text-center text-[1.35rem] text-charcoal",
             "transition-colors duration-500 focus:outline-none disabled:opacity-40",
             invalid
-              ? "border-clay"
+              ? "border-rust"
               : focused === index
                 ? "border-charcoal"
                 : "border-charcoal/20",

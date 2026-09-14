@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import SiteShell from "@/components/SiteShell";
 import ContactLink from "@/components/ContactLink";
 import SaveButton from "@/components/account/SaveButton";
+import { RecordView } from "@/components/account/RecentlyViewed";
 import { RevealText, Fade } from "@/components/Reveal";
 import { getCategories, getProduct, groupOf } from "@/lib/catalogue";
 import { BRAND, CONTACT } from "@/lib/brand";
@@ -174,6 +175,17 @@ export default async function ProductPage({ params }: Params) {
                       Or call {CONTACT.phone}
                     </ContactLink>
                     <SaveButton slug={p.id} name={p.name} />
+                    {/* Remembered by this browser alone, for the account's
+                        "recently viewed" row. Nothing is sent anywhere. */}
+                    <RecordView
+                      slug={p.id}
+                      name={p.name}
+                      category={cat.title}
+                      categorySlug={cat.slug}
+                      src={p.src}
+                      width={p.width}
+                      height={p.height}
+                    />
                   </div>
                 </Fade>
               </div>

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 import { currentUser } from "@/lib/auth/session";
+import { createEnquiry } from "@/lib/account/enquiries";
 import { ensureProduct } from "@/lib/catalogue-db";
 import { sendMail, mailFrom } from "@/lib/email/mailer";
 import {
@@ -150,15 +150,16 @@ async function record(
   // else is dropped rather than stored as a dangling reference.
   const productId = data.productSlug ? await ensureProduct(data.productSlug) : null;
 
-  await prisma.enquiry.create({
-    data: {
-      email: data.email,
-      message: data.message,
-      userId: user?.id ?? null,
-      name: user?.fullName ?? null,
-      phone: user?.phone ?? null,
-      productId,
-    },
+  // Goes through the same service the account uses, so every enquiry — from
+  // the homepage or from a member's saved list — gets a reference it can be
+  // discussed by.
+  await createEnquiry({
+    email: data.email,
+    message: data.message,
+    userId: user?.id ?? null,
+    name: user?.fullName ?? null,
+    phone: user?.phone ?? null,
+    productId,
   });
 }
 

@@ -91,7 +91,7 @@ export default function PhoneVerifyPanel({
         <QuietButton type="button" onClick={send} busy={busy}>
           Send a code
         </QuietButton>
-        <p className="max-w-sm text-[0.78rem] leading-relaxed text-charcoal/40">
+        <p className="max-w-sm text-[0.88rem] leading-relaxed text-charcoal/65">
           {available
             ? `We text six digits to ${phone}.`
             : "Text messages are not set up on this server yet, so nothing will arrive. Your number is on file and can be confirmed once they are."}
@@ -116,7 +116,7 @@ export default function PhoneVerifyPanel({
       </div>
 
       {devCode && (
-        <p className="mt-3 border-l border-olive/50 pl-3 text-[0.72rem] leading-relaxed text-charcoal/55">
+        <p className="mt-3 border-l border-olive/50 pl-3 text-[0.82rem] leading-relaxed text-charcoal/75">
           Development: nothing was sent, so here is the code —{" "}
           <span className="tracking-[0.3em] text-charcoal">{devCode}</span>
         </p>
@@ -139,7 +139,7 @@ export default function PhoneVerifyPanel({
           type="button"
           onClick={send}
           disabled={cooldown > 0 || busy}
-          className="text-[0.75rem] text-charcoal/45 underline-offset-4 transition-colors hover:text-charcoal hover:underline disabled:no-underline disabled:hover:text-charcoal/45"
+          className="text-[0.85rem] text-charcoal/70 underline-offset-4 transition-colors hover:text-charcoal hover:underline disabled:no-underline disabled:hover:text-charcoal/70"
         >
           {cooldown > 0 ? `Send another in ${cooldown}s` : "Send another code"}
         </button>

@@ -115,7 +115,7 @@ export default function VerifyFlow({
       />
 
       {done && (
-        <p aria-live="polite" className="text-[0.8rem] text-olive">
+        <p aria-live="polite" className="text-[0.9rem] text-moss">
           Both confirmed. Opening your account…
         </p>
       )}
@@ -223,10 +223,10 @@ function Panel({
     return (
       <div className="flex items-baseline justify-between gap-6">
         <div>
-          <p className="eyebrow text-[0.6rem] text-charcoal/40">{heading}</p>
-          <p className="mt-2 text-[0.92rem] text-charcoal/70">{target}</p>
+          <p className="eyebrow text-[0.72rem] text-charcoal/65">{heading}</p>
+          <p className="mt-2 text-[1rem] text-charcoal/85">{target}</p>
         </div>
-        <p className="flex items-center gap-2 text-[0.75rem] text-olive">
+        <p className="flex items-center gap-2 text-[0.85rem] text-moss">
           <span aria-hidden="true" className="h-1 w-1 rounded-full bg-olive" />
           Confirmed
         </p>
@@ -238,13 +238,13 @@ function Panel({
     return (
       <div className="flex items-baseline justify-between gap-6 opacity-45">
         <div>
-          <p className="eyebrow text-[0.6rem] text-charcoal/40">{heading}</p>
-          <p className="mt-2 text-[0.92rem] text-charcoal/70">{target}</p>
+          <p className="eyebrow text-[0.72rem] text-charcoal/65">{heading}</p>
+          <p className="mt-2 text-[1rem] text-charcoal/85">{target}</p>
         </div>
         {/* Two codes were promised at the top of the page. If one of them
             cannot be sent, say so here rather than leaving a step queued that
             is never going to arrive. */}
-        <p className="max-w-[13rem] text-right text-[0.75rem] leading-snug text-charcoal/50">
+        <p className="max-w-[13rem] text-right text-[0.85rem] leading-snug text-charcoal/75">
           {unavailable ? "Saved — we will confirm it later" : "Next"}
         </p>
       </div>
@@ -254,11 +254,11 @@ function Panel({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-6">
-        <p className="eyebrow text-[0.6rem] text-charcoal/40">{heading}</p>
-        <p className="text-[0.78rem] text-charcoal/55">{target}</p>
+        <p className="eyebrow text-[0.72rem] text-charcoal/65">{heading}</p>
+        <p className="text-[0.88rem] text-charcoal/75">{target}</p>
       </div>
 
-      <p className="mt-4 text-[0.85rem] leading-relaxed text-charcoal/55">
+      <p className="mt-4 text-[0.95rem] leading-relaxed text-charcoal/75">
         {channel === "email"
           ? "Type the six digits we sent, or open the link in the message."
           : "Type the six digits we sent by text message."}
@@ -280,7 +280,7 @@ function Panel({
       </div>
 
       {problem && (
-        <p className="mt-2 border-l border-clay/40 pl-3 text-[0.72rem] leading-relaxed text-charcoal/45">
+        <p className="mt-2 border-l border-rust/40 pl-3 text-[0.82rem] leading-relaxed text-charcoal/70">
           {problem}
         </p>
       )}
@@ -288,7 +288,7 @@ function Panel({
       {/* Development only — the server returns the code it could not send, so
           the flow can be finished on a machine with no gateway configured. */}
       {devCode && (
-        <p className="mt-3 border-l border-olive/50 pl-3 text-[0.72rem] leading-relaxed text-charcoal/55">
+        <p className="mt-3 border-l border-olive/50 pl-3 text-[0.82rem] leading-relaxed text-charcoal/75">
           Development: nothing was sent, so here is the code —{" "}
           <span className="tracking-[0.3em] text-charcoal">{devCode}</span>
         </p>
@@ -311,7 +311,7 @@ function Panel({
           type="button"
           onClick={resend}
           disabled={cooldown > 0 || busy}
-          className="text-[0.75rem] text-charcoal/45 underline-offset-4 transition-colors hover:text-charcoal hover:underline disabled:no-underline disabled:hover:text-charcoal/45"
+          className="text-[0.85rem] text-charcoal/70 underline-offset-4 transition-colors hover:text-charcoal hover:underline disabled:no-underline disabled:hover:text-charcoal/70"
         >
           {cooldown > 0 ? `Send another in ${cooldown}s` : "Send another code"}
         </button>

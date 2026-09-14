@@ -97,7 +97,7 @@ export default function LoginForm({
           <div className="-mt-1 flex justify-end">
             <Link
               href="/forgot-password"
-              className="text-[0.72rem] text-charcoal/45 underline-offset-4 transition-colors hover:text-charcoal hover:underline"
+              className="text-[0.82rem] text-charcoal/70 underline-offset-4 transition-colors hover:text-charcoal hover:underline"
             >
               Forgotten your password?
             </Link>
@@ -108,7 +108,7 @@ export default function LoginForm({
 
         <FormNotice error={error}>
           {showGoogleHint && (
-            <p className="mt-1.5 text-[0.72rem] leading-snug text-charcoal/45">
+            <p className="mt-1.5 text-[0.82rem] leading-snug text-charcoal/70">
               If you set this account up with Google, use the button below instead — there is
               no password on it yet.
             </p>

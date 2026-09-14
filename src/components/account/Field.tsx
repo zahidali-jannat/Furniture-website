@@ -34,7 +34,7 @@ export function Field({
     <div className="group">
       <label
         htmlFor={id}
-        className="eyebrow block text-[0.625rem] tracking-[0.22em] text-charcoal/45"
+        className="eyebrow block text-[0.625rem] tracking-[0.22em] text-charcoal/70"
       >
         {label}
       </label>
@@ -48,9 +48,9 @@ export function Field({
         {...rest}
         className={[
           "mt-2 w-full border-b bg-transparent pb-2.5 text-[0.95rem] text-charcoal",
-          "placeholder:text-charcoal/25 focus:outline-none disabled:opacity-50",
+          "placeholder:text-charcoal/60 focus:outline-none disabled:opacity-50",
           "transition-colors duration-500",
-          error ? "border-clay" : "border-charcoal/20 focus:border-charcoal",
+          error ? "border-rust" : "border-charcoal/20 focus:border-charcoal",
         ].join(" ")}
         style={{ transitionTimingFunction: "var(--ease-lux)" }}
       />
@@ -89,7 +89,7 @@ export function PasswordField({
     <div>
       <label
         htmlFor={id}
-        className="eyebrow block text-[0.625rem] tracking-[0.22em] text-charcoal/45"
+        className="eyebrow block text-[0.625rem] tracking-[0.22em] text-charcoal/70"
       >
         {label}
       </label>
@@ -104,9 +104,9 @@ export function PasswordField({
           {...rest}
           className={[
             "mt-2 w-full border-b bg-transparent pb-2.5 pr-12 text-[0.95rem] text-charcoal",
-            "placeholder:text-charcoal/25 focus:outline-none disabled:opacity-50",
+            "placeholder:text-charcoal/60 focus:outline-none disabled:opacity-50",
             "transition-colors duration-500",
-            error ? "border-clay" : "border-charcoal/20 focus:border-charcoal",
+            error ? "border-rust" : "border-charcoal/20 focus:border-charcoal",
           ].join(" ")}
           style={{ transitionTimingFunction: "var(--ease-lux)" }}
         />
@@ -115,7 +115,7 @@ export function PasswordField({
           type="button"
           onClick={() => setShown((v) => !v)}
           aria-pressed={shown}
-          className="absolute bottom-2.5 right-0 eyebrow text-[0.6rem] text-charcoal/40 transition-colors hover:text-charcoal focus-visible:outline-none focus-visible:text-charcoal"
+          className="absolute bottom-2.5 right-0 eyebrow text-[0.72rem] text-charcoal/65 transition-colors hover:text-charcoal focus-visible:outline-none focus-visible:text-charcoal"
         >
           {shown ? "Hide" : "Show"}
         </button>
@@ -132,11 +132,11 @@ function FieldNote({ id, error, hint }: { id: string; error?: string; hint?: str
   return (
     <div className="min-h-[1.15rem] pt-1.5">
       {error ? (
-        <p id={`${id}-error`} role="alert" className="text-[0.72rem] leading-snug text-clay">
+        <p id={`${id}-error`} role="alert" className="text-[0.82rem] leading-snug text-rust">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-hint`} className="text-[0.72rem] leading-snug text-charcoal/40">
+        <p id={`${id}-hint`} className="text-[0.82rem] leading-snug text-charcoal/65">
           {hint}
         </p>
       ) : null}

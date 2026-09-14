@@ -7,12 +7,14 @@ import ChapterRail from "@/components/collections/ChapterRail";
 import { RevealText, Fade } from "@/components/Reveal";
 import { getChapters, getForthcoming, getRooms } from "@/lib/catalogue";
 import { BRAND } from "@/lib/brand";
+import { absolute, jsonLd, pageMetadata, siteUrl } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Collections — ${BRAND.wordmark}`,
+export const metadata: Metadata = pageMetadata({
+  title: "Collections",
   description:
-    "A curated collection of furniture designed for contemporary spaces. Sofas, chairs, wardrobes and beds.",
-};
+    "Every piece the workshop makes, read as one long page: sofas, lounge chairs, wardrobes, beds and chandeliers, made in runs of forty and quoted on enquiry.",
+  path: "/collections",
+});
 
 /**
  * The catalogue, read as one continuous piece.
@@ -48,6 +50,7 @@ export default function CollectionsPage() {
           </Fade>
 
           <RevealText
+            as="h1"
             lines={["A curated collection", "of furniture designed", "for contemporary spaces."]}
             className="display max-w-[20ch] text-[clamp(2.1rem,5.2vw,5rem)] leading-[1.02] text-charcoal"
             italicLast

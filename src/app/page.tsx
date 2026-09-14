@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import SmoothScroll from "@/components/SmoothScroll";
 import Grain from "@/components/Grain";
 import Preloader from "@/components/Preloader";
@@ -16,6 +17,19 @@ import Homes from "@/components/sections/Homes";
 import Bedroom from "@/components/sections/Bedroom";
 import Closing from "@/components/sections/Closing";
 import Footer from "@/components/sections/Footer";
+import { BRAND } from "@/lib/brand";
+
+/**
+ * The homepage answers one question — what does this brand make — so its title
+ * and description say that plainly rather than listing furniture types. The
+ * types have pages of their own, and those are what rank for them.
+ */
+export const metadata: Metadata = {
+  title: { absolute: `${BRAND.wordmark} — ${BRAND.tagline}` },
+  description:
+    "Furniture made in small runs in oak, bouclé and stone — sofas, chairs, wardrobes, beds and lighting. Seen by appointment in Copenhagen, quoted in writing.",
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (

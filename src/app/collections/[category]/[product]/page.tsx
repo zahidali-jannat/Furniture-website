@@ -9,6 +9,14 @@ import { RecordView } from "@/components/account/RecentlyViewed";
 import { RevealText, Fade } from "@/components/Reveal";
 import { getCategories, getProduct, groupOf } from "@/lib/catalogue";
 import { BRAND, CONTACT } from "@/lib/brand";
+import {
+  breadcrumbSchema,
+  jsonLd,
+  pageMetadata,
+  productDescription,
+  productSchema,
+  searchLabel,
+} from "@/lib/seo";
 
 type Params = { params: Promise<{ category: string; product: string }> };
 
@@ -22,10 +30,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { category, product } = await params;
   const found = getProduct(category, product);
   if (!found) return {};
-  return {
-    title: `${found.product.name} — ${found.category.title} — ${BRAND.wordmark}`,
-    description: found.product.note,
-  };
+
+  return pageMetadata({
+    title: `${found.product.name} — ${found.category.title}`,
+    description: productDescription(found.product, found.category, found.position),
+    path: `/collections/${found.category.slug}/${found.product.id}`,
+    image: found.product.src,
+    imageAlt: `${found.product.name}, a ${found.category.title.toLowerCase().replace(/s$/, "")} by ${BRAND.wordmark}`,
+  });
 }
 
 /**
@@ -43,8 +55,29 @@ export default async function ProductPage({ params }: Params) {
   const { category: cat, product: p, previous, next, position } = found;
   const parent = groupOf(cat.slug);
 
+  const description = productDescription(p, cat, position);
+  const trail = [
+    { name: "Collections", path: "/collections" },
+    ...(parent ? [{ name: parent.title, path: `/collections/${parent.slug}` }] : []),
+    { name: cat.title, path: `/collections/${cat.slug}` },
+    { name: p.name, path: `/collections/${cat.slug}/${p.id}` },
+  ];
+
+  // Four other pieces from the same collection. Deliberately not "you may also
+  // like": nothing here is personalised, and saying so would be an invention.
+  const siblings = cat.products.filter((other) => other.id !== p.id).slice(0, 4);
+
   return (
     <SiteShell>
+      {/* A description of what is on the page and how it was reached. No price,
+          no availability and no rating: the site quotes in writing after an
+          enquiry, and a crawler must not be told otherwise. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbSchema(trail))} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLd(productSchema(p, cat, description))}
+      />
+
       {/*
         A single-viewport layout rather than a stack of fixed heights.
         The page is a column of the height of the screen; the breadcrumb and the
@@ -225,6 +258,86 @@ export default async function ProductPage({ params }: Params) {
           </Fade>
         </div>
       </article>
+
+      {/*
+        Below the fold on purpose. The plate above is a single-viewport
+        composition and stays exactly as designed; this is what a reader who
+        scrolls past it wants — the rest of the collection, and the way back up
+        the hierarchy.
+      */}
+      {siblings.length > 0 && (
+        <section
+          data-nav="light"
+          aria-labelledby="more-from"
+          className="w-full bg-bone px-5 pb-[12vh] pt-2 md:px-10 md:pb-[16vh]"
+        >
+          <div className="mx-auto max-w-[1800px]">
+            <Fade>
+              <div className="flex flex-wrap items-baseline justify-between gap-4 border-t border-charcoal/12 pt-8">
+                <h2 id="more-from" className="font-display text-[clamp(1.4rem,2.6vw,2.2rem)] text-charcoal">
+                  More from {cat.title}
+                </h2>
+                <Link
+                  href={`/collections/${cat.slug}`}
+                  className="group inline-flex items-baseline gap-3 eyebrow text-charcoal/55 transition-colors duration-500 hover:text-charcoal"
+                >
+                  Explore all {cat.title.toLowerCase()}
+                  <span
+                    aria-hidden="true"
+                    className="block h-px w-8 origin-left bg-charcoal/30 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-12 group-hover:bg-charcoal"
+                  />
+                </Link>
+              </div>
+            </Fade>
+
+            <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-10">
+              {siblings.map((other) => (
+                <li key={other.id}>
+                  <Link href={`/collections/${cat.slug}/${other.id}`} className="group block">
+                    <span className="media-frame block bg-transparent">
+                      <Image
+                        src={other.src}
+                        alt={`${other.name} — ${cat.title} by ${BRAND.wordmark}`}
+                        width={other.width}
+                        height={other.height}
+                        sizes="(max-width: 768px) 45vw, 22vw"
+                        loading="lazy"
+                        className="block h-auto w-full transition-opacity duration-[1.2s] group-hover:opacity-85"
+                        style={{ transitionTimingFunction: "var(--ease-lux)" }}
+                      />
+                    </span>
+                    <span className="mt-3 block font-display text-[1.05rem] text-charcoal">
+                      {other.name}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {parent && (
+              <Fade>
+                <p className="mt-12 text-[0.95rem] text-charcoal/60">
+                  {cat.title} sit within{" "}
+                  <Link
+                    href={`/collections/${parent.slug}`}
+                    className="text-charcoal underline decoration-charcoal/25 underline-offset-4 transition-colors hover:decoration-charcoal"
+                  >
+                    {parent.title.toLowerCase()}
+                  </Link>
+                  , alongside the rest of{" "}
+                  <Link
+                    href="/collections"
+                    className="text-charcoal underline decoration-charcoal/25 underline-offset-4 transition-colors hover:decoration-charcoal"
+                  >
+                    the collection
+                  </Link>
+                  .
+                </p>
+              </Fade>
+            )}
+          </div>
+        </section>
+      )}
     </SiteShell>
   );
 }

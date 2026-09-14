@@ -1,14 +1,49 @@
 "use client";
 
+import Link from "next/link";
 import { BRAND, CONTACT } from "@/lib/brand";
 import ContactLink from "@/components/ContactLink";
 import { Fade } from "@/components/Reveal";
+import { getChapters, getRooms } from "@/lib/catalogue";
 
-const COLUMNS = [
-  { title: "Collection", links: ["Seating", "Lighting", "Tables", "Bedroom"] },
-  { title: "Maison", links: ["The workshop", "Materials", "Journal", "Stockists"] },
-  { title: "Care", links: ["Delivery", "Repairs", "Reupholstery", "Terms"] },
-];
+/**
+ * The footer's links are the site's main crawl path, and they used to be
+ * decoration: twelve labels — Journal, Stockists, Reupholstery, Terms — all
+ * pointing at #contact, for pages that do not exist. A link that goes nowhere
+ * it says it goes is a small lie told on every page of the site.
+ *
+ * They are now built from the catalogue, so the furniture types listed are the
+ * ones the workshop actually photographs, and each goes to its own page.
+ */
+function columns() {
+  const chapters = getChapters().slice(0, 5);
+  const rooms = getRooms();
+
+  return [
+    {
+      title: "Collection",
+      links: chapters.map((c) => ({ label: c.title, href: `/collections/${c.slug}` })),
+    },
+    {
+      title: "Maison",
+      links: [
+        { label: "The collection", href: "/collections" },
+        ...(rooms ? [{ label: "Rooms", href: `/collections/${rooms.slug}` }] : []),
+        { label: "Materials", href: "/#materials" },
+        { label: "Contact", href: "/contact" },
+      ],
+    },
+    {
+      title: "Members",
+      links: [
+        { label: "Your account", href: "/account" },
+        { label: "Saved pieces", href: "/account/saved" },
+        { label: "Consultations", href: "/account/consultations" },
+        { label: "Sign in", href: "/login" },
+      ],
+    },
+  ];
+}
 
 export default function Footer() {
   return (
@@ -49,19 +84,19 @@ export default function Footer() {
             </Fade>
           </div>
 
-          {COLUMNS.map((col) => (
+          {columns().map((col) => (
             <nav key={col.title} className="md:col-span-2 md:col-start-auto">
               <h3 className="eyebrow mb-5 text-bone/35">{col.title}</h3>
               <ul className="space-y-3">
                 {col.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#contact"
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
                       className="group relative inline-block text-[0.9rem] text-bone/70 transition-colors duration-500 hover:text-bone"
                     >
-                      {l}
+                      {l.label}
                       <span className="absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:origin-left group-hover:scale-x-100" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

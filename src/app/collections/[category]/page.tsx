@@ -7,6 +7,15 @@ import { RevealText, Fade } from "@/components/Reveal";
 import GroupView from "@/components/collections/GroupView";
 import { getCategories, getCategory, getGroupBySlug, getGroupSlugs, groupOf } from "@/lib/catalogue";
 import { BRAND } from "@/lib/brand";
+import {
+  breadcrumbSchema,
+  categoryDescription,
+  clamp,
+  collectionSchema,
+  jsonLd,
+  pageMetadata,
+  searchLabel,
+} from "@/lib/seo";
 
 type Params = { params: Promise<{ category: string }> };
 
@@ -24,11 +33,32 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const slug = (await params).category;
+
   const group = getGroupBySlug(slug);
-  if (group) return { title: `${group.title} — ${BRAND.wordmark}`, description: group.intro };
+  if (group) {
+    return pageMetadata({
+      title: group.title,
+      description: clamp(
+        `${group.blurb} ${group.intro} ${group.categories.length} furniture types, made in runs of forty and quoted on enquiry.`
+      ),
+      path: `/collections/${group.slug}`,
+      image: group.categories.find((c) => c.cover)?.cover ?? undefined,
+      imageAlt: `${group.title} by ${BRAND.wordmark}`,
+    });
+  }
+
   const cat = getCategory(slug);
   if (!cat) return {};
-  return { title: `${cat.title} — ${BRAND.wordmark}`, description: cat.intro };
+
+  // "Designer sofas" in the title tag, "Sofas" on the page. The first is how
+  // the thing is searched for, the second is how the brand says it.
+  return pageMetadata({
+    title: searchLabel(cat),
+    description: categoryDescription(cat),
+    path: `/collections/${cat.slug}`,
+    image: cat.cover ?? undefined,
+    imageAlt: `${cat.title} by ${BRAND.wordmark}`,
+  });
 }
 
 /**
@@ -62,8 +92,19 @@ export default async function CategoryPage({ params }: Params) {
   const parent = groupOf(cat.slug);
   const others = getCategories().filter((c) => c.slug !== cat.slug);
 
+  const trail = [
+    { name: "Collections", path: "/collections" },
+    ...(parent ? [{ name: parent.title, path: `/collections/${parent.slug}` }] : []),
+    { name: cat.title, path: `/collections/${cat.slug}` },
+  ];
+
   return (
     <SiteShell>
+      {/* The same breadcrumb the page shows, and the same pieces it lists —
+          structured data describing what is on the page, not extra claims. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbSchema(trail))} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collectionSchema(cat))} />
+
       <section
         data-nav="light"
         className="relative w-full bg-bone px-5 pb-[10vh] pt-[22vh] md:px-10 md:pb-[14vh] md:pt-[26vh]"
@@ -99,6 +140,7 @@ export default async function CategoryPage({ params }: Params) {
           <div className="mt-10 grid grid-cols-1 gap-y-8 md:mt-16 md:grid-cols-12 md:items-end">
             <div className="md:col-span-7">
               <RevealText
+                as="h1"
                 lines={[cat.title]}
                 className="display text-[clamp(2.8rem,9vw,8rem)] text-charcoal"
               />

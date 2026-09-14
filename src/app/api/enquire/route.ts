@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
+import { currentUser } from "@/lib/auth/session";
+import { ensureProduct } from "@/lib/catalogue-db";
 import { sendMail, mailFrom } from "@/lib/email/mailer";
 import {
   CONFIRMATION_SUBJECT,
@@ -39,7 +42,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Malformed request." }, { status: 400 });
   }
 
-  const { email, company } = (body ?? {}) as { email?: unknown; company?: unknown };
+  const { email, company, productSlug, message } = (body ?? {}) as {
+    email?: unknown;
+    company?: unknown;
+    productSlug?: unknown;
+    message?: unknown;
+  };
 
   // Honeypot: a real person never fills a field they cannot see. Answer 200 so
   // a bot cannot tell it was caught.
@@ -63,6 +71,15 @@ export async function POST(req: Request) {
       { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
     );
   }
+
+  // Recorded so it appears in the sender's account, but never depended on: the
+  // enquiry form predates the database and has to keep working without one, so
+  // a failure here is logged and the confirmation still goes out.
+  record(req, {
+    email: address,
+    productSlug: typeof productSlug === "string" ? productSlug : null,
+    message: typeof message === "string" ? message.slice(0, 2000) : null,
+  }).catch((err) => console.error("[enquiry] not recorded", err));
 
   try {
     const result = await sendMail({
@@ -113,6 +130,36 @@ export async function POST(req: Request) {
       { status: 502 }
     );
   }
+}
+
+/**
+ * Files the enquiry against an account when there is one.
+ *
+ * Attached by user id if the sender is signed in; otherwise only the address is
+ * kept, and it will join their account later — /account/enquiries matches on
+ * the verified address as well as the id, so the enquiry that brought somebody
+ * here is waiting for them when they register.
+ */
+async function record(
+  req: Request,
+  data: { email: string; productSlug: string | null; message: string | null }
+) {
+  const user = await currentUser().catch(() => null);
+
+  // Only a slug that is actually in the catalogue becomes a link; anything
+  // else is dropped rather than stored as a dangling reference.
+  const productId = data.productSlug ? await ensureProduct(data.productSlug) : null;
+
+  await prisma.enquiry.create({
+    data: {
+      email: data.email,
+      message: data.message,
+      userId: user?.id ?? null,
+      name: user?.fullName ?? null,
+      phone: user?.phone ?? null,
+      productId,
+    },
+  });
 }
 
 /**

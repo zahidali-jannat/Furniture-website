@@ -1,0 +1,35 @@
+# A Postgres for development.
+#
+#   docker compose up -d db      start it
+#   docker compose down          stop it, keeping the data
+#   docker compose down -v       stop it and throw the data away
+#
+# The credentials match the DATABASE_URL in .env.example. They are deliberately
+# boring and deliberately local: this container listens on localhost only and is
+# not a thing to deploy.
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: maison-noir-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: maison
+      POSTGRES_PASSWORD: maison
+      POSTGRES_DB: maison_noir
+    ports:
+      # Bound to the loopback interface rather than 0.0.0.0, so the database is
+      # not reachable from the network the laptop happens to be on.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - maison-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # `prisma migrate` run the instant the container starts will fail; this
+      # is what `docker compose up --wait` waits for.
+      test: ["CMD-SHELL", "pg_isready -U maison -d maison_noir"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  maison-pgdata:

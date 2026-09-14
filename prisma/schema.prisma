@@ -1,0 +1,435 @@
+// Maison Noir — data model.
+//
+// Two halves that meet in one place:
+//
+//   Accounts   Users, the providers they sign in with, the tokens that prove
+//              an address or a phone belongs to them, and the sessions that
+//              keep them signed in. This half is authoritative — nothing else
+//              knows about it.
+//
+//   Catalogue  Collections, categories, products, images and variants. These
+//              are a *mirror*. The folders under image/ remain the source of
+//              truth (see COLLECTIONS.md); `npm run catalogue:sync` pushes the
+//              generated catalogue into these tables so that a favourite or an
+//              enquiry can point at a real row with a real foreign key. The
+//              public pages still read the generated JSON, so the catalogue
+//              renders with no database on the hot path.
+//
+// Anything a person could use to authenticate is stored hashed — passwords,
+// one-time codes, verification links and refresh tokens alike. A dump of this
+// database lets nobody sign in as anybody.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// The connection URL is not here: since Prisma 7 the CLI reads it from
+// prisma.config.ts, and the application connects through the node-postgres
+// driver adapter in src/lib/db.ts. Nothing secret belongs in a committed schema.
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------- accounts --
+
+enum UserStatus {
+  /// Registered, but email and phone are not both confirmed yet.
+  PENDING
+  /// Verified and able to use the account area.
+  ACTIVE
+  /// Signed off by us — kept so enquiries stay attributable.
+  SUSPENDED
+}
+
+model User {
+  id       String  @id @default(cuid())
+  fullName String
+  email    String  @unique
+  /// E.164, e.g. +4531224466. Optional: a Google sign-in has no phone at first.
+  phone    String? @unique
+
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+
+  /// Null for an account that only ever signs in with Google.
+  passwordHash String?
+  /// Google's picture URL. Never proxied, never required.
+  avatarUrl    String?
+
+  status UserStatus @default(PENDING)
+
+  /// Brute-force defence, per account rather than per IP so a distributed
+  /// attempt against one address is still slowed down.
+  failedLoginCount Int       @default(0)
+  lockedUntil      DateTime?
+  lastLoginAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  providers          AuthProvider[]
+  sessions           Session[]
+  emailVerifications EmailVerificationToken[]
+  phoneOtps          PhoneOtp[]
+  passwordResets     PasswordResetToken[]
+  savedProducts      SavedProduct[]
+  enquiries          Enquiry[]
+  consultations      Consultation[]
+  preferences        UserPreference?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// One row per external identity. A password is not a provider — it lives on
+/// the user — so this table is what makes "sign in with Google *and* keep your
+/// password" work without a second account appearing.
+model AuthProvider {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// "google" today. Lower-case, stable, never shown to a visitor.
+  provider String
+  /// The provider's own immutable id for the person (Google's `sub`).
+  providerAccountId String
+  /// The address the provider asserted, kept for support questions only.
+  email String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+/// Proof that an address is reachable. Carries both a link token and a typed
+/// code so the visitor can click or type, whichever is in front of them.
+model EmailVerificationToken {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// SHA-256 of a 32-byte random token. High entropy, so a fast digest is
+  /// the right tool — there is nothing to brute-force.
+  tokenHash String @unique
+  /// bcrypt of the six-digit code. Low entropy, so it gets a slow hash.
+  codeHash  String
+
+  email      String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  /// Wrong codes so far. The row is spent once this passes the limit.
+  attempts   Int       @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PhoneOtp {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// The number this code was sent to, so changing the number invalidates it.
+  phone      String
+  codeHash   String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  attempts   Int       @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([phone])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  /// The address the link was sent to, for the audit trail.
+  requestedIp String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+/// A signed-in device. The refresh token is opaque and stored only as a digest;
+/// rotating it on every use means a stolen copy is detectable — a second use of
+/// a spent token revokes every session the account has.
+model Session {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  refreshTokenHash String  @unique
+  userAgent        String?
+  ip               String?
+
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  /// Set when a spent token is presented again, so the reason is recoverable.
+  revokedReason String?
+  lastUsedAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// --------------------------------------------------------------- catalogue --
+
+/// A group of categories — "Lighting", "Seating". Mirrors `groups` in the
+/// generated catalogue.
+model Collection {
+  id     String @id @default(cuid())
+  /// The key used in the generated catalogue, e.g. "lighting".
+  key    String @unique
+  slug   String @unique
+  title  String
+  blurb  String @default("")
+  intro  String @default("")
+  position Int  @default(0)
+
+  categories Category[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id      String  @id @default(cuid())
+  slug    String  @unique
+  title   String
+  tagline String  @default("")
+  intro   String  @default("")
+  cover   String?
+
+  collectionId String?
+  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collectionId])
+}
+
+model Product {
+  id   String @id @default(cuid())
+  /// The catalogue id — "sofa-04". Unique within the whole catalogue because
+  /// it already carries the category prefix.
+  slug String @unique
+  name String
+  note String @default("")
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  position Int @default(0)
+
+  images   ProductImage[]
+  variants ProductVariant[]
+  savedBy       SavedProduct[]
+  enquiries     Enquiry[]
+  consultations Consultation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([slug])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  url    String
+  width  Int
+  height Int
+  alt    String  @default("")
+  /// The first image is what a card and a favourite show.
+  primary Boolean @default(false)
+  position Int    @default(0)
+
+  @@index([productId])
+}
+
+/// Finish and material options. The catalogue does not carry these yet; the
+/// table exists so a variant can be added without a migration later.
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sku      String  @unique
+  name     String
+  material String?
+  finish   String?
+  /// Minor units. Null while a piece is quoted rather than priced.
+  priceCents Int?
+  currency   String @default("EUR")
+  available  Boolean @default(true)
+
+  @@index([productId])
+}
+
+model SavedProduct {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+/// Where an enquiry has got to. The workshop moves it along by hand; these are
+/// the words they already use on the studio whiteboard, not invented stages.
+enum EnquiryStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  AWAITING_RESPONSE
+  CONSULTATION_SCHEDULED
+  RESOLVED
+  CLOSED
+}
+
+model Enquiry {
+  id String @id @default(cuid())
+
+  /// Quotable over the phone: MN-2609-4KTQ. Generated, never guessable in
+  /// sequence, and short enough to read aloud without spelling it twice.
+  reference String @unique
+
+  /// Null for the homepage form, which asks for an address and nothing else.
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  email   String
+  name    String?
+  phone   String?
+  subject String?
+  message String?
+
+  /// Set when the enquiry came from a product page.
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  status EnquiryStatus @default(SUBMITTED)
+
+  /// The workshop's written reply, when there is one. Deliberately a single
+  /// field rather than a message thread: this is correspondence that finishes
+  /// in an email or a visit, and a half-built chat would be worse than neither.
+  response    String?
+  respondedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// What the visitor is coming in for.
+enum ConsultationKind {
+  PRODUCT
+  INTERIOR
+  CUSTOM
+  SHOWROOM
+  MATERIAL
+}
+
+enum ConsultationStatus {
+  /// The visitor has asked for a time. Nothing is promised yet.
+  REQUESTED
+  /// The studio has agreed to it.
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+/// An appointment with the studio.
+///
+/// Requested, not booked: the visitor proposes a time and the workshop confirms
+/// it, which is how the studio already works — the enquiry email says somebody
+/// will reply to arrange one. A self-service calendar that hands out
+/// confirmations nobody has agreed to would be a lie with a nice interface.
+model Consultation {
+  id        String @id @default(cuid())
+  reference String @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  kind   ConsultationKind   @default(SHOWROOM)
+  status ConsultationStatus @default(REQUESTED)
+
+  /// What the visitor asked for, and what was agreed. Kept apart so a
+  /// rescheduled appointment still shows what was originally wanted.
+  requestedAt DateTime
+  confirmedAt DateTime?
+  minutes     Int       @default(60)
+
+  /// "The Copenhagen showroom", "By telephone". Free text: there are two
+  /// rooms and a phone, not a venue database.
+  location   String?
+  consultant String?
+  note       String?
+
+  /// Set when the appointment is about one piece in particular.
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  cancelledAt DateTime?
+  cancelReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([requestedAt])
+}
+
+/// What we may write to somebody about.
+///
+/// Every promotional flag defaults to false. Consent is something a person
+/// gives, not something a default takes; the two that default to true are
+/// replies to things they started, which is not marketing.
+model UserPreference {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  enquiryUpdates         Boolean @default(true)
+  consultationReminders  Boolean @default(true)
+  productUpdates         Boolean @default(false)
+  newCollections         Boolean @default(false)
+  promotions             Boolean @default(false)
+
+  /// How they would rather be reached: "email" or "phone".
+  preferredChannel String @default("email")
+
+  updatedAt DateTime @updatedAt
+}

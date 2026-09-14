@@ -177,6 +177,14 @@ export default function Nav() {
           <NavLink href={telHref()} label={`Call ${CONTACT.phone}`}>Contact</NavLink>
           <span aria-hidden="true" className="hidden h-3 w-px bg-current/20 md:block" />
           <NavLink href={onHome ? "#contact" : "/#contact"}>Enquire</NavLink>
+          <span aria-hidden="true" className="hidden h-3 w-px bg-current/20 md:block" />
+          {/*
+            One link for both states. Every page on this site is cached, so a bar
+            that said "Sign in" or "Your account" would have to decide after
+            hydration and flicker on the way. /account is the honest answer to
+            both: signed in it opens, signed out it asks.
+          */}
+          <NavLink href="/account">Account</NavLink>
         </div>
       </nav>
     </header>

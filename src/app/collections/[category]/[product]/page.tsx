@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteShell from "@/components/SiteShell";
 import ContactLink from "@/components/ContactLink";
+import SaveButton from "@/components/account/SaveButton";
 import { RevealText, Fade } from "@/components/Reveal";
 import { getCategories, getProduct, groupOf } from "@/lib/catalogue";
 import { BRAND, CONTACT } from "@/lib/brand";
@@ -172,6 +173,7 @@ export default async function ProductPage({ params }: Params) {
                     <ContactLink className="eyebrow text-charcoal/50 transition-colors duration-500 hover:text-charcoal">
                       Or call {CONTACT.phone}
                     </ContactLink>
+                    <SaveButton slug={p.id} name={p.name} />
                   </div>
                 </Fade>
               </div>
